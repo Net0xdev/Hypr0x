@@ -18,7 +18,6 @@
 # swappy: This is a screenshot editor tool
 # grim: This is a screenshot tool it grabs images from a Wayland compositor
 # slurp: This helps with screenshots, it selects a region in a Wayland compositor
-# thunar: This is a graphical file manager
 # polkit-gnome: needed to get superuser access on some graphical appliaction
 # python-requests: needed for the weather module script to execute
 # pamixer: This helps with audio settings such as volume
@@ -29,7 +28,6 @@
 # blueman: Graphical bluetooth manager
 # network-manager-applet: Applet for managing network connection
 # gvfs: adds missing functionality to thunar such as automount usb drives
-# thunar-archive-plugin: Provides a front ent for thunar to work with compressed files
 # file-roller: Backend set of tools for working with compressed files
 # btop: Resource monitor that shows usage and stats for processor, memory, disks, network and processes.
 # pacman-contrib: adds additional tools for pacman. needed for showing system updates in the polybar
@@ -126,7 +124,7 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
 
     #Stage 1
     echo -e "\n$CNT - Stage 1 - Installing main components, this may take a while..."
-    for SOFTWR in hyprland kitty polybar swww swaylock-effects wofi wlogout mako xdg-desktop-portal-hyprland swappy grim slurp nautilus nautilus-archive polkit-gnome
+    for SOFTWR in hyprland kitty polybar swww swaylock-effects wofi wlogout mako xdg-desktop-portal-hyprland swappy grim slurp nautilus polkit-gnome
     do
         #First lets see if the package is there
         if yay -Qs $SOFTWR > /dev/null ; then
@@ -164,7 +162,7 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
 
     #Stage 3
     echo -e "\n$CNT - Stage 3 - Installing theme and visual related tools and utilities, this may take a while..."
-    for SOFTWR in starship ttf-jetbrains-mono-nerd noto-fonts-emoji lxappearance xfce4-settings sddm-git qt5-svg qt5-quickcontrols2 qt5-graphicaleffects
+    for SOFTWR in starship ttf-jetbrains-mono-nerd ttf-jetbrains-mono noto-fonts-emoji lxappearance xfce4-settings sddm-git qt5-svg qt5-quickcontrols2 qt5-graphicaleffects
     do
         #First lets see if the package is there
         if yay -Qs $SOFTWR > /dev/null ; then
@@ -256,34 +254,6 @@ if [[ $STAR == "Y" || $STAR == "y" ]]; then
     echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
     echo -e "$CNT - copying starship config file to ~/.confg ..."
     cp extras/starship.toml ~/.config/
-fi
-
-### Install software for Asus ROG laptops ###
-read -n1 -rep $'[\e[1;33mACTION\e[0m] - For ASUS ROG Laptops - Would you like to install Asus ROG software support? (y,n) ' ROG
-if [[ $ROG == "Y" || $ROG == "y" ]]; then
-    echo -e "$CNT - Adding Keys..."
-    sudo pacman-key --recv-keys 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35 &>> $INSTLOG
-    sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35 &>> $INSTLOG
-    sudo pacman-key --lsign-key 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35 &>> $INSTLOG
-    sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35 &>> $INSTLOG
-
-    LOC="/etc/pacman.conf"
-    echo -e "$CNT - Updating $LOC with g14 repo."
-    echo -e "\n[g14]\nServer = https://arch.asus-linux.org" | sudo tee -a $LOC &>> $INSTLOG
-    echo -e "\n"
-    echo -e "$CNT - Update the system..."
-    sudo pacman -Suy --noconfirm &>> $INSTLOG
-
-    echo -e "$CNT - Installing ROG pacakges..."
-    sudo pacman -S --noconfirm asusctl supergfxctl rog-control-center &>> $INSTLOG
-    echo -e "$CNT - Activating ROG services..."
-    sudo systemctl enable --now power-profiles-daemon.service &>> $INSTLOG
-    sleep 2
-    sudo systemctl enable --now supergfxd &>> $INSTLOG
-    sleep 2
-
-    #add the keybinding file to the config
-    echo -e "\nsource = ~/.config/hypr/rog-g15-strix-2021-binds.conf" >> ~/.config/hypr/hyprland.conf
 fi
 
 ### Script is done ###
